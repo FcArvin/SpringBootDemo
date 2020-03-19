@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<title>Create Script System</title>
+    <meta charset="UTF-8" />
+    <title></title>
+ 	<link rel="stylesheet" href="static/css/arvinOneCssFile.css"/>
+    <link rel="stylesheet" href="static/css/bootstrap.min.css"/>
+    
+    
+	<script th:src="@{/static/js/common/jquery-2.1.1.js}"></script>
+	<script th:src="@{/static/js/common/bootstrap.min.js}"></script>
+	<script th:src="@{/static/js/common/js_constant.js}"></script>
+	<script th:src="@{/static/js/common/jquery.cookie.js}"></script>
+	<script th:src="@{/static/js/common/common.js}"></script>
+	<script th:src="@{/static/js/login/login.js}"></script>
+</head>
+<body>
+<div>
+	<div class="style-3">
+		<img style="width:60%" src="/static/img/LoginPicture.png"></img>
+	</div>
+	<div class="style-4">
+		
+		<div class="style-2 row" style="margin-top: -8%;">
+			<div class="col-sm-6" style="margin-left: 22.8%">
+				姓名：<input type="text" id="loginName" ><br/><br/>
+			</div>
+			<div class="col-sm-6" style="margin-left: -19.5%;width: 10%;">
+				<span id="loginNameError" style="color: red;margin-left: -30%"></span>
+			</div>
+		</div>
+		<div class="style-2 row">
+			<div class="col-sm-6" style="margin-left: 22.8%">
+				密码：<input type="password" id="loginPassword" ><br><br/>
+			</div>
+			<div class="col-sm-6" style="margin-left: -19.5%;width: 10%;">
+				<span id="loginPasswordError" style="color: red;margin-left: -30%"></span>
+			</div>
+			
+		</div>
+		<div style="margin-left: -2%;">
+			<input style="width: 4%;" type="button" onclick="getUserNameAndPassword()" value="登录" id="loginButton"></input>
+		</div> 		
+	</div>
+</div>
+</body>
+</html>

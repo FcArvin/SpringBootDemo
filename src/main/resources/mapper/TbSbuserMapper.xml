@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.TbSbuserMapper" >
+  <resultMap id="BaseResultMap" type="com.example.demo.po.TbSbuser" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="UserName" property="username" jdbcType="VARCHAR" />
+    <result column="UserAge" property="userage" jdbcType="INTEGER" />
+    <result column="UserBirthday" property="userbirthday" jdbcType="TIMESTAMP" />
+    <result column="UserAddress" property="useraddress" jdbcType="VARCHAR" />
+    <result column="UserTelephone" property="usertelephone" jdbcType="VARCHAR" />
+    <result column="UserEmail" property="useremail" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="CreateBy" property="createby" jdbcType="VARCHAR" />
+    <result column="CreateDate" property="createdate" jdbcType="TIMESTAMP" />
+    <result column="UpdateBy" property="updateby" jdbcType="VARCHAR" />
+    <result column="UpdateDate" property="updatedate" jdbcType="TIMESTAMP" />
+  </resultMap>
+</mapper>

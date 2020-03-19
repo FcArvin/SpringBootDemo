@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+	<context id="MysqlContext" targetRuntime="MyBatis3Simple" defaultModelType="flat">
+		<property name="beginningDelimiter" value="`" />
+		<property name="endingDelimiter" value="`" />
+
+		<!-- 指向Mybatis通用mapper类 -->
+		<plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+			<property name="mappers" value="com.example.demo.util.MyMapper" />
+		</plugin>
+		
+		<!-- 配置Mybatis数据源   SpringBoot
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+						connectionURL="jdbc:mysql://localhost:3306/stringbootdb"
+						userId="root" 
+						password="arvin123">
+		</jdbcConnection>
+		 -->
+
+		<!-- 配置Mybatis数据源   UserManagement UAT -->
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+						connectionURL="jdbc:mysql://10.205.138.143:8066/usermanagement?useUnicode=true&amp;characterEncoding=UTF-8"
+						userId="usermanagement" 
+						password="UseUAT123!@#">
+		</jdbcConnection>
+		
+		<!-- 配置Mybatis数据源   UserManagement PRO
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+						connectionURL="rm-wz96te82xn15a1wn3.mysql.rds.aliyuncs.com:3306"
+						userId="ro4user" 
+						password="Back123456!">
+		</jdbcConnection>
+		 -->
+		<!-- 对于生成的pojo（实体类）所在路径 -->
+		<javaModelGenerator
+			targetPackage="com.example.demo.po" targetProject="src/main/java" />
+
+		<!-- 对于生成的mapper.xml文件所在目录 -->
+		<sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources" />
+
+		<!-- 配置mapper对应的java映射 -->
+		<javaClientGenerator targetPackage="com.example.demo.mapper" targetProject="src/main/java"
+			type="XMLMAPPER" />
+
+		<!-- 对应数据库需要生成的表名 -->
+		<!-- <table tableName="tb_sbuser"></table> -->
+		 
+    </context>
+</generatorConfiguration>

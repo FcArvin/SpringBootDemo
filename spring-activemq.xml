@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:amq="http://activemq.apache.org/schema/core"
+	xmlns:jms="http://www.springframework.org/schema/jms" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation=" 
+    	http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/mvc  http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd  
+        http://www.springframework.org/schema/jms  http://www.springframework.org/schema/jms/spring-jms-4.1.xsd  
+        http://activemq.apache.org/schema/core  http://activemq.apache.org/schema/core/activemq-core-5.8.0.xsd">
+
+
+	<!-- 重发机制配置                开始 -->
+	<bean id="activeMQRedeliveryPolicy" class="org.apache.activemq.RedeliveryPolicy">
+		<!--是否在每次尝试重新发送失败后,增长这个等待时间 -->
+		<property name="useExponentialBackOff" value="true"></property>
+		<!--重发次数,默认为6次 这里设置为1次 -->
+		<property name="maximumRedeliveries" value="1"></property>
+		<!--重发时间间隔,默认为1秒 -->
+		<property name="initialRedeliveryDelay" value="1000"></property>
+		<!--第一次失败后重新发送之前等待500毫秒,第二次失败再等待500 * 2毫秒,这里的2就是value -->
+		<property name="backOffMultiplier" value="2"></property>
+		<!--最大传送延迟，只在useExponentialBackOff为true时有效（V5.5），假设首次重连间隔为10ms，倍数为2，那么第 
+			二次重连时间间隔为 20ms，第三次重连时间间隔为40ms，当重连时间间隔大的最大重连时间间隔时，以后每次重连时间间隔都为最大重连时间间隔。 -->
+		<property name="maximumRedeliveryDelay" value="1000"></property>
+	</bean>
+
+	<bean id="policyConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory"> 
+		<property name="brokerURL" value="tcp://localhost:61616"></property> 
+		<property name="redeliveryPolicy" ref="activeMQRedeliveryPolicy" /> 
+	</bean>
+	<!-- 重发机制配置                 结束 -->
+	
+	<!-- 这里的是用默认的localhost，如果做了修改或是项目上线，这个要换成网络ip地址，具体见上面的配置提到 -->
+	<!-- 如果连接网络：tcp://ip:61616；未连接网络：tcp://localhost:61616 以及用户名，密码 -->
+	<!-- <amq:connectionFactory id="amqConnectionFactory" brokerURL="tcp://localhost:61616" userName="Arvin_Cheng" password="AIziji123" /> -->
+
+	<!-- 配置JMS连接工长 -->
+	<!-- 真正可以产生Connection的ConnectionFactory，由对应的 JMS服务厂商提供 --> 
+	<bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">  
+        <property name="brokerURL" value="tcp://localhost:61616" />  
+        <property name="useAsyncSend" value="true" />  <!-- 提高发送速度 -->
+        <property name="alwaysSessionAsync" value="true" /> <!--  对于一个connection如果只有一个session，该值有效，否则该值无效，默认这个参数的值为true -->
+        <property name="useDedicatedTaskRunner" value="true" />  
+    </bean>  
+
+	 <!--这个是队列目的地，点对点的        发送请求消息队列-->  
+    <bean id="destinationQueue" class="org.apache.activemq.command.ActiveMQQueue">  
+	    <constructor-arg value="Arvin_Request_MQ"/>  
+	</bean> 
+	
+    <!--这个是主题目的地，一对多的-->  
+	<bean id="topicDestination" class="org.apache.activemq.command.ActiveMQQueue">  
+	    <constructor-arg value="queue"/>  
+	</bean>  
+
+	<!-- 配置JMS模板（Queue），Spring提供的JMS工具类，它发送、接收消息（这个是配置生产者）。 -->
+	<bean id="producerJmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="defaultDestination" ref="destinationQueue" />
+		<property name="receiveTimeout" value="10000" />
+		<property name="pubSubDomain" value="false" />
+		 <property name="sessionTransacted" value="false"/>  
+	</bean>
+	
+	<!--定义监听器 
+	<bean id="queueMessageListener" class="one.project.arvin.active.listener.QueueMessageListener" />-->
+
+	<!-- 显示注入消息监听容器（Queue），配置连接工厂，监听的目标是destinationQueue，监听器是上面定义的监听器 -->
+	<bean id="queueListenerContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="destination" ref="destinationQueue" />
+		<!-- <property name="messageListener" ref="queueMessageListener" /> -->
+	</bean>
+</beans>  

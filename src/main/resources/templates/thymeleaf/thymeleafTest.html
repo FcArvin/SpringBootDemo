@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8" />
+    <title></title>
+    
+	<!-- <script th:src="@{/static/js/thymeleafTest.js}"></script> -->
+    
+</head>
+<body>
+
+<div>
+	项目名称：<input th:id="${user.projectName}" th:name="${user.projectName}" th:value="${user.projectName}"/>
+	<br/>
+	项目作者：<input th:value="${user.projectAuthor}"/>
+	<br/>
+	项目日期：<input th:value="${#dates.format(user.projectDate, 'yyyy-MM-dd')}"/>
+	<br/>
+	项目备注：<input th:value="${user.projectRemark}"/>
+	<br/>
+	项目备注1：<input th:value="${user.projectRemark1}"/>
+	<br/>
+	项目备注2：<input th:value="${user.projectRemark2}"/>
+	<br/>
+</div>
+
+<br/>
+
+<div th:object="${user}">
+	项目名称：<input th:id="*{projectName}" th:name="*{projectName}" th:value="*{projectName}"/>
+	<br/>
+	项目作者：<input th:value="*{projectAuthor}"/>
+	<br/>
+	项目日期：<input th:value="*{#dates.format(projectDate, 'yyyy-MM-dd')}"/>
+	<br/>
+	项目备注：<input th:value="*{projectRemark}"/>
+	<br/>
+	项目备注1：<input th:value="${projectRemark1}"/>
+	<br/>
+	项目备注2：<input th:value="${projectRemark2}"/>
+	<br/>
+</div>
+
+<br/>
+
+text 与 utext ：<br/>
+使用text：<span th:text="${user.projectRemark2}">abc</span>
+<br/>
+使用utext：<span th:utext="${user.projectRemark2}">abc</span>
+<br/>
+<br/>
+ 
+URL:<br/>
+<a href="" th:href="@{http://www.baidu.com}">度娘</a>
+<br/>
+
+
+<br/>
+<form th:action="@{/Method_12}" th:object="${user}" th:method="post">
+    <input type="text" th:field="*{projectName}"/><br>
+    <input type="text" th:field="*{projectAuthor}"/><br>
+    <input type="submit"/>
+</form>
+<br/>
+
+
+<br/>
+<div th:if="${user.age} == 18">等于18岁</div>
+<div th:if="${user.age} gt 18">大于18岁</div>
+<div th:if="${user.age} lt 18">小于18岁</div>
+<div th:if="${user.age} ge 18">大于等于18岁</div>
+<div th:if="${user.age} le 18">小于等于18岁</div>
+<br/>
+
+
+<br/>
+<select>
+     <option >选择框</option>
+     <option th:selected="${user.projectAuthor eq 'lee'}">lee</option>
+     <option th:selected="${user.projectAuthor eq 'imooc'}">imooc</option>
+     <option th:selected="${user.projectAuthor eq 'LeeCX'}">LeeCX</option>
+     <option th:selected="${user.projectAuthor eq 'Arvin_Feng'}">Arvin_Feng</option>
+</select>
+<br/>
+
+<br/>
+<table>
+    <tr>
+        <th>姓名</th>
+        <th>年龄</th>
+        <th>年龄备注</th>
+        <th>生日</th>
+    </tr>
+    <tr th:each="person:${userList}">
+        <td th:text="${person.projectAuthor}"></td>
+        <td th:text="${person.age}"></td>
+        <td th:text="${person.age gt 18} ? 你老了 : 你很年轻">18岁</td>
+        <td th:text="${#dates.format(user.projectDate, 'yyyy-MM-dd hh:mm:ss')}"></td>
+    </tr>
+</table>
+<br/>
+
+<br/>
+<div th:switch="${user.projectName}">
+  <p th:case="'lee'">lee</p>
+  <p th:case="#{roles.manager}">普通管理员</p>
+  <p th:case="#{roles.superadmin}">超级管理员</p>
+  <p th:case="*">其他用户</p>
+</div>
+<br/>
+
+</body>
+</html>
